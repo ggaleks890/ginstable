@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Carte interactive des villes instables à gauche ElectionScope</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+body{
+font-family: Arial;
+margin:0;
+padding:0;
+}
+
+h2{
+text-align:center;
+}
+
+#map{
+height:90vh;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>Carte interactive des villes instables à gauche ElectionScope</h2>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+// création de la carte
+var franceBounds = [
+[41.0,-5.5],   // sud-ouest
+[51.5,9.5]     // nord-est
+];
+
+var map = L.map('map', {
+maxBounds: franceBounds,
+maxBoundsViscosity: 1.0
+}).setView([46.6,2.4],6);
+
+// fond de carte
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+attribution:'© OpenStreetMap'
+}).addTo(map);
+
+
+// liste des villes
+var villes = [
+
+["Orsay",48.699,2.187],
+["Roissy-en-Brie",48.791,2.653],
+["Villeparisis",48.942,2.613],
+["Conflans-Sainte-Honorine",48.997,2.098],
+["Athis-Mons",48.707,2.393],
+["Igny",48.742,2.225],
+["Juvisy-sur-Orge",48.689,2.374],
+["Palaiseau",48.715,2.246],
+["Saint-Michel-sur-Orge",48.636,2.307],
+["Colombes",48.923,2.253],
+["Le Blanc-Mesnil",48.938,2.465],
+["Livry-Gargan",48.919,2.536],
+["Noisy-le-Grand",48.849,2.552],
+["Boissy-Saint-Léger",48.753,2.511],
+["L'Haÿ-les-Roses",48.779,2.338],
+["Villeneuve-Saint-Georges",48.732,2.447],
+["Argenteuil",48.947,2.247],
+["Éragny",49.016,2.098],
+["Gonesse",48.986,2.449],
+["Vierzon",47.222,2.069],
+["Lucé",48.436,1.463],
+["Blois",47.586,1.335],
+["Romorantin-Lanthenay",47.358,1.743],
+["Valentigney",47.463,6.831],
+["Nevers",46.989,3.159],
+["Belfort",47.637,6.863],
+["Évreux",49.024,1.150],
+["Alençon",48.432,0.092],
+["Argentan",48.744,-0.022],
+["Flers",48.748,-0.574],
+["Bolbec",49.573,0.473],
+["Déville-lès-Rouen",49.469,1.052],
+["Sotteville-lès-Rouen",49.414,1.090],
+["Yvetot",49.617,0.755],
+["Château-Thierry",49.048,3.403],
+["Dunkerque",51.034,2.377],
+["Faches-Thumesnil",50.599,3.073],
+["Fourmies",50.015,4.047],
+["Loos",50.610,3.017],
+["Saint-Amand-les-Eaux",50.447,3.430],
+["Sin-le-Noble",50.366,3.112],
+["Tourcoing",50.724,3.161],
+["Berck",50.406,1.564],
+["Béthune",50.529,2.640],
+["Boulogne-sur-Mer",50.726,1.614],
+["Calais",50.951,1.858],
+["Hénin-Beaumont",50.417,2.950],
+["Charleville-Mézières",49.773,4.720],
+["La Chapelle-Saint-Luc",48.316,4.039],
+["Romilly-sur-Seine",48.517,3.726],
+["Vitry-le-François",48.724,4.585],
+["Fameck",49.298,6.109],
+["Strasbourg",48.573,7.752],
+["Wittenheim",47.810,7.327],
+["La Chapelle-sur-Erdre",47.299,-1.553],
+["Angers",47.478,-0.563],
+["Laval",48.073,-0.770],
+["La Flèche",47.699,-0.075],
+["La Roche-sur-Yon",46.670,-1.426],
+["Lamballe",48.468,-2.517],
+["Plérin",48.533,-2.770],
+["Saint-Brieuc",48.514,-2.765],
+["Concarneau",47.875,-3.918],
+["Morlaix",48.577,-3.828],
+["Fougères",48.351,-1.202],
+["Saintes",45.746,-0.634],
+["Libourne",44.914,-0.241],
+["Pessac",44.806,-0.632],
+["Saint-Médard-en-Jalles",44.896,-0.717],
+["Billère",43.304,-0.395],
+["Oloron-Sainte-Marie",43.190,-0.611],
+["Orthez",43.489,-0.772],
+["Pau",43.296,-0.370],
+["Niort",46.323,-0.458],
+["Limoges",45.833,1.261],
+["Castelnaudary",43.318,1.954],
+["Millau",44.100,3.083],
+["Villefranche-de-Rouergue",44.351,2.037],
+["Bagnols-sur-Cèze",44.162,4.620],
+["Cugnaux",43.537,1.345],
+["Saint-Gaudens",43.108,0.723],
+["Graulhet",43.758,2.004],
+["Moissac",44.104,1.084],
+["Bourg-en-Bresse",46.205,5.225],
+["Cusset",46.134,3.456],
+["Bourg-lès-Valence",44.947,4.893],
+["Romans-sur-Isère",45.046,5.055],
+["Bourgoin-Jallieu",45.587,5.274],
+["Grenoble",45.188,5.724],
+["Roanne",46.036,4.070],
+["Riom",45.893,3.113],
+["Décines-Charpieu",45.768,4.958],
+["Saint-Fons",45.709,4.852],
+["Saint-Priest",45.696,4.943],
+["Chambéry",45.564,5.917],
+["Digne-les-Bains",44.093,6.232],
+["Arles",43.676,4.627],
+["Aubagne",43.292,5.569],
+["Miramas",43.584,5.002],
+["Rognac",43.486,5.232],
+["Vitrolles",43.460,5.248],
+["La Seyne-sur-Mer",43.103,5.878],
+["Bollène",44.281,4.750],
+["Bastia",42.698,9.450]
+
+];
+
+
+// ajout des marqueurs
+for(var i=0;i<villes.length;i++){
+
+var ville=villes[i];
+
+L.circleMarker([ville[1],ville[2]],{
+radius:8,
+fillColor:"#FEB9B9",
+color:"#FEB9B9",
+weight:1,
+opacity:1,
+fillOpacity:0.9
+})
+.addTo(map)
+.bindPopup("<b>"+ville[0]+"</b>");
+
+}
+
+</script>
+
+</body>
+</html>
